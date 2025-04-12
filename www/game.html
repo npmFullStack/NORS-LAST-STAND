@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
+        <title>Nors' Last Stand</title>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&family=Creepster&display=swap");
+
+            :root {
+                --green: #6cb246;
+                --red: #c21818;
+                --dark: #1a1a1a;
+                --blood: #8a0303;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                background-color: black;
+                background-size: cover;
+                height: 100vh;
+                width: 100vw;
+                overflow: hidden;
+                font-family: "Creepster", cursive;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* Modal Styles */
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 100;
+            }
+
+            .modal-content {
+                background-color: var(--dark);
+                border: 0.3rem solid var(--red);
+                border-radius: 1rem;
+                padding: 2rem;
+                width: 80%;
+                max-width: 25rem;
+                text-align: center;
+                box-shadow: 0 0 2rem var(--red);
+            }
+
+            .modal h2 {
+                color: var(--green);
+                font-size: 2.5rem;
+                margin-bottom: 1.5rem;
+                text-shadow: 0.2rem 0.2rem 0.2rem black;
+                letter-spacing: 0.1rem;
+                font-family: "Rubik Wet Paint", cursive;
+            }
+
+            .modal input {
+                width: 100%;
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+                font-size: 1.5rem;
+                background-color: #333;
+                border: 0.15rem solid var(--red);
+                color: white;
+                font-family: "Creepster", cursive;
+                border-radius: 0.5rem;
+                text-align: center;
+            }
+
+            .modal button {
+                background-color: var(--red);
+                color: white;
+                border: none;
+                padding: 0.8rem 1.5rem;
+                font-size: 1.5rem;
+                font-family: "Creepster", cursive;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: all 0.3s;
+                letter-spacing: 0.1rem;
+            }
+
+            .modal button:hover {
+                background-color: var(--green);
+                transform: scale(1.05);
+            }
+
+            /* Main Menu */
+            .menu-container {
+                width: 80%;
+                max-width: 22rem;
+                display: none; /* Hidden until name is entered */
+            }
+
+            .menu-title {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .menu-title h1 {
+                color: #6cb246;
+                font-size: 4.5rem;
+                -webkit-text-stroke: 0.15rem #2e5a1e;
+                letter-spacing: 0.1rem;
+                line-height: 1;
+                font-family: "Rubik Wet Paint", cursive;
+            }
+
+            .sub-title {
+                color: #d84040;
+                font-size: 2.5em;
+                -webkit-text-stroke: 0.1rem #8e1616;
+                margin-top: 0.5rem;
+                font-family: "Rubik Wet Paint", cursive;
+            }
+            #welcomeText {
+                font-size: 1.5rem;
+                margin-top: 2rem;
+                border-radius: 0.5rem;
+                font-family: "Creepster", cursive;
+            }
+
+            .menu-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .menu-btn {
+                background-color: var(--dark);
+                border: 0.2rem solid var(--red);
+                color: white;
+                padding: 0.8rem;
+                font-size: 1.5rem;
+                font-family: "Creepster", cursive;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: all 0.3s;
+                text-align: center;
+                letter-spacing: 0.1rem;
+                text-shadow: 0.1rem 0.1rem 0.1rem black;
+                box-shadow: 0 0.4rem 0 0 var(--blood);
+                position: relative;
+                overflow: hidden;
+                height: 3.5rem;
+            }
+
+            .menu-btn:hover {
+                background-color: var(--red);
+                transform: translateY(0.2rem);
+                box-shadow: 0 0.2rem 0 0 var(--blood);
+            }
+
+            .menu-btn:active {
+                transform: translateY(0.4rem);
+                box-shadow: none;
+            }
+
+            .menu-btn::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.2),
+                    transparent
+                );
+                transition: 0.5s;
+            }
+
+            .menu-btn:hover::before {
+                left: 100%;
+            }
+
+            /* Blood splatter effect */
+            .blood-splatter {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                opacity: 0.1;
+                z-index: -1;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="blood-splatter"></div>
+
+        <!-- Name Input Modal -->
+        <div class="modal" id="nameModal">
+            <div class="modal-content">
+                <h2>ENTER YOUR NAME</h2>
+                <input
+                    type="text"
+                    id="playerName"
+                    placeholder="SURVIVOR"
+                    maxlength="12"
+                />
+                <button id="continueBtn">CONTINUE</button>
+            </div>
+        </div>
+
+        <!-- Main Menu -->
+        <div class="menu-container" id="menuContainer">
+            <div class="menu-title">
+                <h1>NORS</h1>
+                <h2 class="sub-title">LAST STAND</h2>
+                <p id="welcomeText">WELCOME, SURVIVOR</p>
+            </div>
+
+            <div class="menu-buttons">
+                <button
+                    class="menu-btn"
+                    onclick="window.location.href='play.html'"
+                >
+                    PLAY GAME
+                </button>
+                <button
+                    class="menu-btn"
+                    onclick="window.location.href='shop.html'"
+                >
+                    SHOP
+                </button>
+                <button
+                    class="menu-btn"
+                    onclick="window.location.href='settings.html'"
+                >
+                    SETTINGS
+                </button>
+                <button class="menu-btn" id="exitBtn">EXIT</button>
+            </div>
+        </div>
+
+        <script>
+            // DOM Elements
+            const nameModal = document.getElementById("nameModal");
+            const menuContainer = document.getElementById("menuContainer");
+            const playerNameInput = document.getElementById("playerName");
+            const continueBtn = document.getElementById("continueBtn");
+            const welcomeText = document.getElementById("welcomeText");
+            const exitBtn = document.getElementById("exitBtn");
+
+            // Check if player name exists in localStorage
+            const savedName = localStorage.getItem("playerName");
+
+            if (savedName) {
+                // If name exists, hide modal and show menu
+                nameModal.style.display = "none";
+                menuContainer.style.display = "block";
+                welcomeText.textContent = `WELCOME, ${savedName.toUpperCase()}`;
+            } else {
+                // If no name, show modal
+                nameModal.style.display = "flex";
+                menuContainer.style.display = "none";
+            }
+
+            // Continue button click handler
+            continueBtn.addEventListener("click", () => {
+                const name = playerNameInput.value.trim() || "SURVIVOR";
+
+                // Save to localStorage
+                localStorage.setItem("playerName", name);
+
+                // Update UI
+                welcomeText.textContent = `WELCOME, ${name.toUpperCase()}`;
+                nameModal.style.display = "none";
+                menuContainer.style.display = "block";
+            });
+
+            // Exit button handler
+            exitBtn.addEventListener("click", () => {
+                // You can customize the exit behavior
+                if (confirm("ARE YOU SURE YOU WANT TO EXIT?")) {
+                    // For mobile apps, this might need to be replaced with native code
+                    window.close(); // Note: This only works if the window was opened by JavaScript
+
+                    // Alternative for browsers that don't support window.close()
+                    window.location.href = "about:blank";
+                }
+            });
+
+            // Allow pressing Enter in the name input
+            playerNameInput.addEventListener("keypress", e => {
+                if (e.key === "Enter") {
+                    continueBtn.click();
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "appId": "com.norway.norslaststand",
+  "appName": "NORS LAST STAND",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "launchAutoHide": false,
+      "backgroundColor": "#000000"
+    }
+  }
+}
